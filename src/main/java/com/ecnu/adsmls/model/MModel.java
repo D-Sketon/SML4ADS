@@ -22,6 +22,8 @@ public class MModel {
 
     private List<String> requirements = new ArrayList<>();
 
+    private List<String> parametricStls = new ArrayList<>();
+
     public MModel(String simulatorType, String mapType, String map, String weather, double timeStep, double simulationTime, String scenarioEndTrigger, List<MCar> cars, List<String> requirements) {
         this.simulatorType = simulatorType;
         this.mapType = mapType;
@@ -107,5 +109,13 @@ public class MModel {
 
     public void setRequirements(List<String> requirements) {
         this.requirements = requirements;
+    }
+
+    public List<String> getParametricStls() {
+        return parametricStls;
+    }
+
+    public void setParametricStls(List<String> parametricStls) {
+        this.parametricStls = parametricStls;
     }
 }

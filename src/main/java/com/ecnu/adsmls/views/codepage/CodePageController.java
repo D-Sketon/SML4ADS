@@ -1,6 +1,7 @@
 package com.ecnu.adsmls.views.codepage;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ecnu.adsmls.components.editor.Editor;
 import com.ecnu.adsmls.components.editor.modeleditor.ModelEditor;
 import com.ecnu.adsmls.components.editor.treeeditor.TreeEditor;
@@ -546,6 +547,35 @@ public class CodePageController implements Initializable, Route {
 
         tab.setContent(anchorPane);
         tab.setUserData(treeEditor);
+    }
+
+    @FXML
+    public void pstl() {
+        System.out.println("pstl input");
+
+        if (this.tabPane.getTabs().size() == 0) {
+            this.showInfo("Please open model files first");
+            return;
+        }
+        // 当前显示的 tab
+        File file = ((Editor) this.tabPane.getSelectionModel().getSelectedItem().getUserData()).getFile();
+
+        String model = FileSystem.JSONReader(file);
+        MModel mModel = JSON.parseObject(model, MModel.class);
+        if (mModel == null) {
+            return;
+        }
+        ParametricSTLModal parametricSTLModal = new ParametricSTLModal(mModel);
+        parametricSTLModal.getWindow().showAndWait();
+        if (!parametricSTLModal.isConfirm()) {
+            return;
+        }
+        mModel.setParametricStls(parametricSTLModal.getParametricStls());
+
+        String outFilename = FileSystem.removeSuffix(file) + FileSystem.Suffix.MODEL.value;
+        String mModelJson = JSONObject.toJSONString(mModel);
+        FileSystem.JSONWriter(new File(outFilename), mModelJson);
+        this.infoArea.clear();
     }
 
     /**

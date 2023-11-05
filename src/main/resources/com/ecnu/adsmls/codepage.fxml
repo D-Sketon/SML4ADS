@@ -10,6 +10,7 @@
         <items>
           <Button mnemonicParsing="false" onMouseClicked="#preprocess" text="Preprocess" />
             <Button mnemonicParsing="false" onMouseClicked="#verify" text="Verify" />
+            <Button mnemonicParsing="false" onMouseClicked="#pstl" text="PSTL" />
             <Button mnemonicParsing="false" onMouseClicked="#simulate" text="Simulate" />
         </items>
       </ToolBar>
