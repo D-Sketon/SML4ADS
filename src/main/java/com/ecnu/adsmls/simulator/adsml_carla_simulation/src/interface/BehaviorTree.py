@@ -141,9 +141,9 @@ class BehaviorTree:
                     behavior.duration = -1
             else:
                 behavior.duration = -1
-            if 'acceleration' in params.keys():
+            if 'acceleration' in params.keys() and params['acceleration']:
                 behavior.acc = float(params['acceleration'])
-            if 'target speed' in params.keys():
+            if 'target speed' in params.keys() and params['target speed']:
                 behavior.target_vel = float(params['target speed'])
             if v['name'].upper() == 'DECELERATE':
                 behavior.acc *= -1

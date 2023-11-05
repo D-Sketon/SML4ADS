@@ -289,7 +289,7 @@ public class CodePageController implements Initializable, Route {
                 }
                 System.out.println(tree);
             }
-            if (!mTree.getErrMsg().isEmpty()) {
+            if (mTree.getErrMsg() != null && !mTree.getErrMsg().isEmpty()) {
                 this.showInfo(mTree.getErrMsg());
                 return;
             }

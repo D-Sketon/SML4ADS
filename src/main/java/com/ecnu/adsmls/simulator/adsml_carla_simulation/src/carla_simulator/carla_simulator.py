@@ -549,7 +549,7 @@ class CarlaSimulation(Simulation):
                         lateral_offset = MapFilter.choice_lane_random(car.min_lateral_offset, car.max_lateral_offset)
                         right_vector = tf.get_right_vector()
                         tf.location += right_vector * lateral_offset
-                        tf.location += carla.Location(0, 0, 0.4)
+                        tf.location += carla.Location(0, 0, 2)
                         chosen_tfs[car.name] = tf
                         print(f'long offset:{offset}, lateral offset:{lateral_offset}')
                 print(f'chosen transform: {chosen_tfs[car.name]}')
@@ -558,7 +558,7 @@ class CarlaSimulation(Simulation):
                 if spawn_wp is None:
                     raise RuntimeError('cannot get spawn point from given x and y values.')
                 else:
-                    spawn_wp.transform.location += carla.Location(0, 0, 0.4)
+                    spawn_wp.transform.location += carla.Location(0, 0, 2)
                     chosen_tfs[car.name] = spawn_wp.transform
                 print(f'chosen transform: {chosen_tfs[car.name]}')
             elif car.location_type == 'Road Position':
@@ -579,7 +579,7 @@ class CarlaSimulation(Simulation):
                     wp = self.map.get_waypoint_xodr(car.init_road_id, lane_id, offset)
                 tf = wp.transform
                 tf.location += tf.get_right_vector() * (abs_offset - (wp.lane_width / 2))
-                tf.location += carla.Location(0, 0, 0.4)
+                tf.location += carla.Location(0, 0, 2)
                 chosen_tfs[car.name] = tf
                 print(f'offset:{offset}; lat_offset:{lateral_offset}; lane_id:{wp.lane_id}')
                 print(f'chosen transform: {chosen_tfs[car.name]}')
@@ -599,7 +599,7 @@ class CarlaSimulation(Simulation):
             spawn_loc = ref_loc + longitudinal_vec + lateral_vec
             spawn_wp = self.map.get_waypoint(spawn_loc, project_to_road=False)
             spawn_tf = spawn_wp.transform
-            spawn_tf.location += carla.Location(0, 0, 0.4)
+            spawn_tf.location += carla.Location(0, 0, 2)
             chosen_tfs[car.name] = carla.Transform(spawn_loc, ref_tf.rotation)
             print(f'long offset:{longitudinal_offset}, lateral offset:{lateral_offset}, lane:{spawn_wp.lane_id}')
             print(f'longitudinal vec:{longitudinal_vec}, lateral vec:{lateral_vec}, spawn_loc:{spawn_loc}')
