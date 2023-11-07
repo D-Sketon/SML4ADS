@@ -571,6 +571,7 @@ public class CodePageController implements Initializable, Route {
             return;
         }
         mModel.setParametricStls(parametricSTLModal.getParametricStls());
+        mModel.setParametrics(parametricSTLModal.getParametrics());
 
         String outFilename = FileSystem.removeSuffix(file) + FileSystem.Suffix.MODEL.value;
         String mModelJson = JSONObject.toJSONString(mModel);
