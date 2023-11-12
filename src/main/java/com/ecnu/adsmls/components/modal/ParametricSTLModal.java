@@ -32,14 +32,12 @@ public class ParametricSTLModal extends Modal {
     this.mModel = mModel;
     this.loadData();
     ColumnConstraints col1 = new ColumnConstraints();
-    col1.setPercentWidth(30);
-    ColumnConstraints col2 = new ColumnConstraints();
-    col2.setPercentWidth(10);
+    col1.setPercentWidth(60);
     ColumnConstraints col3 = new ColumnConstraints();
-    col3.setPercentWidth(50);
+    col3.setPercentWidth(30);
     ColumnConstraints col4 = new ColumnConstraints();
     col4.setPercentWidth(10);
-    this.slot.getColumnConstraints().addAll(col1, col2, col3, col4);
+    this.slot.getColumnConstraints().addAll(col1, col3, col4);
   }
 
   public List<String> getParametricStls() {
@@ -63,11 +61,9 @@ public class ParametricSTLModal extends Modal {
     this.window.setTitle("PSTL");
 
     Label lbPstl = new Label("pstls");
-    Label lbDummy = new Label("");
     Label lbParametric = new Label("parametrics");
 
     this.listView.setCellFactory(TextFieldListCell.forListView());
-//    this.listView.setEditable(true);
 
     this.parametricsView.setCellFactory(TextFieldListCell.forListView());
     this.parametricsView.setEditable(true);
@@ -78,12 +74,17 @@ public class ParametricSTLModal extends Modal {
     Button btAddStl = new Button("Add");
     btAddStl.setOnAction(e -> {
       this.listView.getItems().add("");
+      this.parametricsView.getItems().add("");
     });
 
     Button btDeleteStl = new Button("Delete");
     btDeleteStl.setOnAction(e -> {
-      String selected = this.listView.getSelectionModel().getSelectedItem();
-      this.listView.getItems().remove(selected);
+      int selectedIndex = this.listView.getSelectionModel().getSelectedIndex();
+      int selectedIndex2 = this.parametricsView.getSelectionModel().getSelectedIndex();
+      if (selectedIndex >= 0) {
+          this.listView.getItems().remove(selectedIndex);
+          this.parametricsView.getItems().remove(selectedIndex2);
+      }
     });
 
     btStlWrapper.getChildren().addAll(btAddStl, btDeleteStl);
@@ -102,34 +103,32 @@ public class ParametricSTLModal extends Modal {
       }
     });
 
-    VBox btParametricWrapper = new VBox();
-    btParametricWrapper.setAlignment(Pos.CENTER);
-    btParametricWrapper.setSpacing(5.0);
-    Button btAddParametric = new Button("Add");
-    btAddParametric.setOnAction(e -> {
-      this.parametricsView.getItems().add("");
-    });
-
-    Button btDeleteParametric = new Button("Delete");
-    btDeleteParametric.setOnAction(e -> {
-      String selected = this.parametricsView.getSelectionModel().getSelectedItem();
-      this.parametricsView.getItems().remove(selected);
-    });
-
-    btParametricWrapper.getChildren().addAll(btAddParametric, btDeleteParametric);
-
-    this.slot.addRow(0, lbParametric, lbDummy, lbPstl);
-    this.slot.addRow(1,  this.parametricsView, btParametricWrapper, this.listView, btStlWrapper);
-    GridPane.setConstraints(textField, 0, 2, 3, 1);
+    this.slot.addRow(0, lbPstl, lbParametric);
+    this.slot.addRow(1, this.listView, this.parametricsView, btStlWrapper);
+    this.slot.setHgap(0);
+    GridPane.setConstraints(textField, 0, 2, 2, 1);
     this.slot.getChildren().add(textField);
 
     Button btSubmit = new Button("Submit Edit");
-    GridPane.setConstraints(btSubmit, 3, 2);
+    GridPane.setConstraints(btSubmit, 2, 2);
     this.slot.getChildren().add(btSubmit);
 
     this.listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
         textField.setText(newValue);
+      }
+    });
+
+    // 第一个listview和第二个listview需要联动，即第一个和第二个的selectIndex需要一致
+    this.listView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue != null) {
+        this.parametricsView.getSelectionModel().select(newValue.intValue());
+      }
+    });
+
+    this.parametricsView.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue != null) {
+        this.listView.getSelectionModel().select(newValue.intValue());
       }
     });
 
